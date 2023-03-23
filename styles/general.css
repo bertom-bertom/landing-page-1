@@ -1,7 +1,6 @@
 header {
 	background-color: #fff;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	padding: 20px;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -19,14 +18,14 @@ body {
 	font-size: 16px;
 	line-height: 1.5;
 	color: #000000;
-	background-color: #7df6cf;
+	background-color: #dadada;
 }
 
 
 footer {
 	font-family: Arial, sans-serif;
 	position: fixed;
-	bottom: 0;
+	bottom: 2%;
   	width: 100%;
 	text-align: center;
     font-size: 10px;
@@ -42,9 +41,10 @@ nav ul {
 }
 
 nav li {
-Font size: 50px;
+	font-size: 150%;
 	position: relative;
 	top: 100px;
+	font-size: 25p;
 	left: 0;
 	width: 100%;
 	z-index: 9999;
@@ -77,3 +77,90 @@ h1 {
     text-align: center;
 }
 
+h2 {
+	font-size: 150%;
+	position: relative
+}
+
+
+
+.animate-charcter
+{
+   text-transform: uppercase;
+  background-image: linear-gradient(
+    -225deg,
+    #000000 0%,
+    #5b5b5b 29%,
+    #5e5e5e 67%,
+    #bdbdbb 100%
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 5s infinite;
+  display: inline-block;
+      font-size: 190px;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+
+
+
+#scroll-container {
+	overflow: hidden;
+	font-size: 150%;
+	position: relative;
+	font-family: Arial, sans-serif;
+	bottom: 50%;
+	color: #000000;
+	z-index: 10000;
+	width: 100%;
+	
+  }
+  
+  #scroll-text {
+	/* animation properties */
+	-moz-transform: translateX(100%);
+	-webkit-transform: translateX(100%);
+	transform: translateX(100%);
+	margin: 0;
+	
+	-moz-animation: my-animation 15s linear infinite;
+	-webkit-animation: my-animation 15s linear infinite;
+	animation: my-animation 15s linear infinite;
+  }
+  
+  /* for Firefox */
+  @-moz-keyframes my-animation {
+	from { -moz-transform: translateX(100%); }
+	to { -moz-transform: translateX(-100%); }
+  }
+  
+  /* for Chrome */
+  @-webkit-keyframes my-animation {
+	from { -webkit-transform: translateX(100%); }
+	to { -webkit-transform: translateX(-100%); }
+  }
+  
+  @keyframes my-animation {
+	from {
+	  -moz-transform: translateX(100%);
+	  -webkit-transform: translateX(100%);
+	  transform: translateX(100%);
+	}
+	to {
+	  -moz-transform: translateX(-100%);
+	  -webkit-transform: translateX(-100%);
+	  transform: translateX(-100%);
+	}
+  
