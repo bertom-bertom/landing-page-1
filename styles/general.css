@@ -89,6 +89,23 @@ h2 {
 
 
 
+@media only screen and (max-width: 600px) {
+  h1 {
+    
+		scale: 150%;
+  }
+
+	li {
+    
+		scale: 400%;
+  }
+
+
+}
+
+
+
+
 #scroll-container {
 	overflow: hidden;
 	font-size: 150%;
