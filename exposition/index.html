@@ -14,18 +14,23 @@
   <style>
     :root {
       --bg: #0d0d0d;
-      --surface: #161616;
+      --surface: #0d0d0d;
       --line: #2a2a2a;
       --text: #e8e3dc;
-      --muted: #6b6560;
+      --muted: #7a746e;
       --accent: #c8b89a;
       --white: #f5f0e8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
     body {
-      background: var(--bg);
+      background: #000;
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
@@ -34,56 +39,133 @@
       flex-direction: column;
     }
 
-    /* ── Nav bar ── */
+    /* ── Fog ── */
+    .fogwrapper {
+      height: 100%;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      pointer-events: none;
+      z-index: 1;
+      -webkit-filter: blur(1px) grayscale(0.2) saturate(1.2) sepia(0.2);
+      filter: blur(1px) grayscale(0.2) saturate(1.2) sepia(0.2);
+    }
+    #foglayer_01, #foglayer_02, #foglayer_03 {
+      height: 100%;
+      position: absolute;
+      width: 200%;
+    }
+    #foglayer_01 .image01, #foglayer_01 .image02,
+    #foglayer_02 .image01, #foglayer_02 .image02,
+    #foglayer_03 .image01, #foglayer_03 .image02 {
+      float: left;
+      height: 100%;
+      width: 50%;
+    }
+    #foglayer_01 {
+      animation: foglayer_01_opacity 10s linear infinite, foglayer_moveme 15s linear infinite;
+    }
+    #foglayer_02, #foglayer_03 {
+      animation: foglayer_02_opacity 21s linear infinite, foglayer_moveme 13s linear infinite;
+    }
+    #foglayer_01 .image01, #foglayer_01 .image02 {
+      background: url("https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/fog1.png") center center/cover no-repeat transparent;
+    }
+    #foglayer_02 .image01, #foglayer_02 .image02,
+    #foglayer_03 .image01, #foglayer_03 .image02 {
+      background: url("https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/fog2.png") center center/cover no-repeat transparent;
+    }
+    @keyframes foglayer_01_opacity {
+      0%   { opacity: .08; }
+      22%  { opacity: .38; }
+      40%  { opacity: .20; }
+      58%  { opacity: .30; }
+      80%  { opacity: .12; }
+      100% { opacity: .08; }
+    }
+    @keyframes foglayer_02_opacity {
+      0%   { opacity: .35; }
+      25%  { opacity: .14; }
+      50%  { opacity: .07; }
+      80%  { opacity: .22; }
+      100% { opacity: .35; }
+    }
+    @keyframes foglayer_03_opacity {
+      0%   { opacity: .55; }
+      27%  { opacity: .14; }
+      52%  { opacity: .42; }
+      68%  { opacity: .20; }
+      100% { opacity: .55; }
+    }
+    @keyframes foglayer_moveme {
+      0%   { left: 0; }
+      100% { left: -100%; }
+    }
+    @media only screen and (min-width: 280px) and (max-width: 767px) {
+      #foglayer_01 .image01, #foglayer_01 .image02,
+      #foglayer_02 .image01, #foglayer_02 .image02,
+      #foglayer_03 .image01, #foglayer_03 .image02 { width: 100%; }
+    }
+
+    /* ── Layout ── */
+    nav, main { position: relative; z-index: 2; }
+
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 24px 40px;
+      padding: 22px 40px;
       border-bottom: 1px solid var(--line);
       position: sticky;
       top: 0;
-      background: var(--bg);
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 10;
     }
 
     .nav-home {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 300;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.14em;
       color: var(--muted);
       text-decoration: none;
       text-transform: uppercase;
       transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .nav-home:hover { color: var(--accent); }
+    .nav-home svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; flex-shrink: 0; }
 
     .nav-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 300;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       color: var(--muted);
       text-transform: uppercase;
     }
 
     .nav-counter {
       font-family: 'DM Sans', sans-serif;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 300;
       color: var(--muted);
       letter-spacing: 0.08em;
+      min-width: 36px;
+      text-align: right;
     }
 
-    /* ── Main layout ── */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
 
-    /* ── Viewer area ── */
+    /* ── Viewer ── */
     .viewer-wrapper {
       position: relative;
       flex: 1;
@@ -91,10 +173,29 @@
 
     model-viewer {
       width: 100%;
-      height: 72vh;
-      min-height: 420px;
-      background: var(--surface);
+      height: 65vh;
+      min-height: 340px;
+      background: transparent;
       --poster-color: transparent;
+      transition: opacity 0.45s ease;
+    }
+    model-viewer.fading { opacity: 0; }
+
+    /* Loading skeleton */
+    .viewer-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #161616 0%, #1e1e1e 50%, #161616 100%);
+      background-size: 200% 200%;
+      animation: shimmer 2s ease infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* ── Nav arrows ── */
@@ -103,112 +204,153 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 5;
-      background: none;
+      background: rgba(13,13,13,0.5);
+      backdrop-filter: blur(8px);
       border: 1px solid var(--line);
       color: var(--muted);
-      width: 52px;
-      height: 52px;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      transition: border-color 0.25s, color 0.25s, background 0.25s;
+      border-radius: 0;
     }
     .arrow:hover {
       border-color: var(--accent);
       color: var(--accent);
-      background: rgba(200,184,154,0.06);
+      background: rgba(200,184,154,0.08);
     }
-    .arrow svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .arrow:active { transform: translateY(-50%) scale(0.95); }
+    .arrow svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 
-    .arrow-left  { left: 28px; }
-    .arrow-right { right: 28px; }
+    .arrow-left  { left: 24px; }
+    .arrow-right { right: 24px; }
 
     /* ── Info strip ── */
     .info {
-      padding: 32px 40px 28px;
+      padding: 28px 40px 24px;
       border-top: 1px solid var(--line);
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 12px 40px;
       align-items: end;
+      background: rgba(13,13,13,0.75);
+      backdrop-filter: blur(8px);
     }
 
     .info-label {
-      font-size: 10px;
-      letter-spacing: 0.18em;
+      font-size: 11px;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      transition: opacity 0.35s ease;
     }
 
     .info-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(26px, 4vw, 38px);
+      font-size: clamp(32px, 5vw, 48px);
       font-weight: 300;
       font-style: italic;
       color: var(--white);
       line-height: 1.1;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
     .info-meta {
-      font-size: 12px;
+      font-size: 14px;
       color: var(--muted);
-      line-height: 1.7;
+      line-height: 1.8;
+      transition: opacity 0.35s ease;
     }
 
+    .info-label.fading-text,
+    .info-title.fading-text,
+    .info-meta.fading-text {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    .info-label, .info-title, .info-meta { transform: translateY(0); }
+
+    /* ── Dot indicators — diamond shape ── */
+    .dots {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 0 20px;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: var(--line);
+      transform: rotate(45deg);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+      border: none;
+      flex-shrink: 0;
+    }
+    .dot:hover { background: var(--muted); }
+    .dot.active {
+      background: var(--accent);
+      transform: rotate(45deg) scale(1.3);
+    }
+
+    /* ── Hint ── */
     .hint {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--muted);
       letter-spacing: 0.06em;
       border-top: 1px solid var(--line);
-      padding: 14px 40px;
+      padding: 13px 40px;
       text-align: center;
+      background: rgba(13,13,13,0.75);
     }
-    .hint span { margin: 0 10px; }
+    .hint span { margin: 0 8px; }
 
-    /* ── Dot indicators ── */
-    .dots {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-      padding: 18px 0 24px;
-    }
-    .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--line);
-      transition: background 0.3s;
-      cursor: pointer;
-    }
-    .dot.active { background: var(--accent); }
-
-    /* ── Transition fade ── */
-    .viewer-wrapper.fading model-viewer {
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    model-viewer {
-      opacity: 1;
-      transition: opacity 0.3s ease;
-    }
-
+    /* ── Mobile ── */
     @media (max-width: 600px) {
-      nav { padding: 18px 20px; }
-      .arrow-left  { left: 12px; }
-      .arrow-right { right: 12px; }
-      .info { padding: 24px 20px 20px; grid-template-columns: 1fr; }
-      .hint { padding: 12px 20px; }
+      nav {
+        padding: 16px 18px;
+      }
+      .nav-title { display: none; }
+      .arrow { width: 40px; height: 40px; }
+      .arrow-left  { left: 10px; }
+      .arrow-right { right: 10px; }
+      model-viewer { height: 55vh; min-height: 280px; }
+      .info {
+        padding: 20px 18px 18px;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .info-title { font-size: clamp(28px, 8vw, 38px); }
+      .info-meta { font-size: 13px; }
+      .hint { padding: 11px 18px; font-size: 11px; }
+      .hint span { margin: 0 5px; }
+    }
+
+    @media (max-width: 380px) {
+      .hint span:not(:first-child) { display: none; }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- Fog layers -->
+  <div class="fogwrapper">
+    <div id="foglayer_01"><div class="image01"></div><div class="image02"></div></div>
+    <div id="foglayer_02"><div class="image01"></div><div class="image02"></div></div>
+    <div id="foglayer_03"><div class="image01"></div><div class="image02"></div></div>
+  </div>
+
   <nav>
-    <a href="#" class="nav-home">&#8617; Accueil</a>
+    <a href="/" class="nav-home">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+      Accueil
+    </a>
     <span class="nav-title">Exposition Virtuelle</span>
     <span class="nav-counter" id="counter">1 / 3</span>
   </nav>
@@ -227,10 +369,12 @@
         camera-controls
         touch-action="pan-y"
         shadow-intensity="1"
-        exposure="1"
+        exposure="1.1"
         camera-orbit="0deg 75deg 2.5m"
         min-camera-orbit="auto auto 1m"
-        max-camera-orbit="auto auto 10m">
+        max-camera-orbit="auto auto 10m"
+        loading="eager"
+        reveal="auto">
       </model-viewer>
 
       <button class="arrow arrow-right" id="nextBtn" aria-label="Œuvre suivante">
@@ -280,9 +424,9 @@
     ];
 
     let current = 0;
+    let transitioning = false;
 
     const viewer    = document.getElementById('modelViewer');
-    const wrapper   = document.getElementById('viewerWrapper');
     const counter   = document.getElementById('counter');
     const infoTitle = document.getElementById('infoTitle');
     const infoNum   = document.getElementById('infoNum');
@@ -291,7 +435,16 @@
     const prevBtn   = document.getElementById('prevBtn');
     const nextBtn   = document.getElementById('nextBtn');
 
-    // Build dots
+    // Preload next model as soon as current loads
+    viewer.addEventListener('load', () => {
+      const next = (current + 1) % works.length;
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = works[next].src;
+      document.head.appendChild(link);
+    });
+
+    // Build diamond dots
     works.forEach((_, i) => {
       const d = document.createElement('button');
       d.className = 'dot' + (i === 0 ? ' active' : '');
@@ -306,11 +459,22 @@
       });
     }
 
+    function fadeTextOut() {
+      [infoNum, infoTitle, infoMeta].forEach(el => el.classList.add('fading-text'));
+    }
+    function fadeTextIn() {
+      [infoNum, infoTitle, infoMeta].forEach(el => el.classList.remove('fading-text'));
+    }
+
     function goTo(index) {
-      if (index === current) return;
+      if (transitioning || index === current) return;
+      transitioning = true;
       current = (index + works.length) % works.length;
 
-      wrapper.classList.add('fading');
+      // Fade out viewer + text simultaneously
+      viewer.classList.add('fading');
+      fadeTextOut();
+
       setTimeout(() => {
         const w = works[current];
         viewer.src = w.src;
@@ -319,18 +483,32 @@
         infoMeta.innerHTML    = w.meta;
         counter.textContent   = `${current + 1} / ${works.length}`;
         updateDots();
-        wrapper.classList.remove('fading');
-      }, 300);
+
+        // Fade viewer back in immediately; text follows after tiny delay
+        requestAnimationFrame(() => {
+          viewer.classList.remove('fading');
+          setTimeout(fadeTextIn, 80);
+          transitioning = false;
+        });
+      }, 400);
     }
 
     prevBtn.addEventListener('click', () => goTo(current - 1));
     nextBtn.addEventListener('click', () => goTo(current + 1));
 
-    // Keyboard navigation
+    // Keyboard nav
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft')  goTo(current - 1);
       if (e.key === 'ArrowRight') goTo(current + 1);
     });
+
+    // Swipe support
+    let touchStartX = 0;
+    viewer.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    viewer.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+    }, { passive: true });
   </script>
 
 </body>
