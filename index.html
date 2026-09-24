@@ -133,24 +133,19 @@
 				</ul>
 			</nav>
 
-
-			<div id="scroll-container">
-				<div id="scroll-text">Site web en construction...<div>
-			</div>
-
-	
-
-
-
 		</header>
 
 		
 
 
-    	<footer>Bertom©2023
-		</footer>
+    	<footer>
+  Bertom © <span id="year"></span>
+</footer>
 	
-		
+		<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
 		
 	</body>
 <html>
