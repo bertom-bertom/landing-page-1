@@ -364,9 +364,9 @@
                 touch-action="pan-y"
                 shadow-intensity="1"
                 exposure="1.1"
-                camera-orbit="0deg 75deg 2.5m"
-                min-camera-orbit="auto auto 1m"
-                max-camera-orbit="auto auto 10m"
+                camera-orbit="0deg 75deg auto"
+                min-camera-orbit="auto auto auto"
+                max-camera-orbit="auto auto auto"
                 loading="eager"
                 reveal="auto">
             </model-viewer>
@@ -396,30 +396,31 @@
 
     <script>
         const works = [
+        {
+                src: './bertom_pot.glb',
+                title: 'Vase en céramique',
+                num: 'Pièce 01',
+                meta: 'Céramique tournée · Argile brune <br>Collection permanente',
+            },
             {
                 src: './ceramic-pot.glb',
                 title: 'Pot en céramique',
-                num: 'Pièce 01',
+                num: 'Pièce 02',
                 meta: 'Céramique tournée · Grès<br>Collection permanente',
             },
             {
                 src: './ceramic_vase.glb',
                 title: 'Vase en céramique',
-                num: 'Pièce 02',
+                num: 'Pièce 03',
                 meta: 'Faïence émaillée · Argile blanche<br>Série limitée',
             },
             {
                 src: './planter_pot.glb',
                 title: 'Pot de jardin',
-                num: 'Pièce 03',
+                num: 'Pièce 04',
                 meta: 'Terre cuite · Finition brute<br>Édition unique',
             },
-            {
-                src: './bertom_pot.glb',
-                title: 'Pot en céramique',
-                num: 'Pièce 04',
-                meta: 'Céramique tournée · Grès<br>Collection permanente',
-            },
+            
         ];
 
         let current = 0;
@@ -452,8 +453,31 @@
             preloadViewers[i] = pv;
         });
 
+        /* ── Auto-fit camera to bounding box ──────────────────────────────
+           After every model load we:
+           1. Read the model's bounding box via getDimensions() → {x, y, z} in metres.
+           2. Compute the spatial diagonal (the longest distance across the object).
+           3. Set camera distance = diagonal × SCALE_FACTOR, which frames any model
+              consistently regardless of its original units/scale in the .glb.
+           4. Also clamp min/max orbit so the user can zoom but stays reasonable.
+        ─────────────────────────────────────────────────────────────────── */
+        const SCALE_FACTOR = 2; // tweak 1.4–2.2 to taste; 1.72 ≈ comfortable padding
+
+        function fitCamera() {
+            const dim = viewer.getDimensions();          // {x, y, z} metres
+            if (!dim) return;
+            const diagonal = Math.sqrt(dim.x ** 2 + dim.y ** 2 + dim.z ** 2);
+            const dist     = diagonal * SCALE_FACTOR;
+
+            // Set orbit: keep azimuth & elevation, only override radius
+            viewer.cameraOrbit    = `0deg 75deg ${dist.toFixed(3)}m`;
+            viewer.minCameraOrbit = `auto auto ${(dist * 0.4).toFixed(3)}m`;
+            viewer.maxCameraOrbit = `auto auto ${(dist * 3.5).toFixed(3)}m`;
+        }
+
         /* ── Fade-in on first load ─────────────────────────────────────── */
         viewer.addEventListener('load', () => {
+            fitCamera();
             viewer.classList.add('loaded');
         }, { once: true });
 
@@ -500,6 +524,7 @@
                 // Re-apply fade-in when this model fires its load event.
                 // If the file was already cached (preloaded), this fires almost immediately.
                 viewer.addEventListener('load', () => {
+                    fitCamera(); // auto-size before revealing
                     requestAnimationFrame(() => {
                         viewer.classList.add('loaded');
                         setTimeout(fadeTextIn, 60);
@@ -528,15 +553,7 @@
             if (e.key === 'ArrowRight') goTo(current + 1);
         });
 
-        // Swipe support
-        let touchStartX = 0;
-        viewer.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-        viewer.addEventListener('touchend', e => {
-            const dx = e.changedTouches[0].screenX - touchStartX;
-            if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
-        }, { passive: true });
+        
     </script>
 
 </body>
