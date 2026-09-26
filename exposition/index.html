@@ -356,14 +356,19 @@
                 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
 
+                <div id="loader" class="loader">
+                    <div class="spinner"></div>
+                    <span>Loading...</span>
+                </div>
+            
             <model-viewer
                 id="modelViewer"
                 src="./bertom_pot.glb"
                 alt="Modèle 3D interactif"
                 camera-controls
-                touch-action="pan-y"
-                shadow-intensity="1"
-                exposure="1.1"
+                touch-action="pan-none"
+                shadow-intensity=".8"
+                exposure="0.8"
                 camera-orbit="0deg 75deg auto"
                 min-camera-orbit="auto auto auto"
                 max-camera-orbit="auto auto auto"
@@ -421,10 +426,10 @@
                 meta: 'Céramique tournée · Argile brune, glaçure noire<br>Série limitée',
             },
             {
-                src: './planter_pot.glb',
-                title: 'Pot de jardin',
+                src: './bertom_wild_clay_pot.glb',
+                title: 'Pot en argile crue',
                 num: 'Pièce 05',
-                meta: 'Terre cuite · Finition brute<br>Édition unique',
+                meta: 'Argile sauvage · Finition brute<br>Édition unique',
             },
             
         ];
