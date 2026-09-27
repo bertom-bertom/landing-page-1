@@ -317,6 +317,53 @@
         @media (max-width: 380px) {
             .hint span:not(:first-child) { display: none; }
         }
+
+        /* Loading overlay */
+.loader {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    transition: opacity 0.3s ease;
+}
+
+/* Spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+
+    border: 4px solid #ddd;
+    border-top-color: #333;
+    border-radius: 50%;
+
+    animation: spin 0.8s linear infinite;
+}
+
+.loader span {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #555;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Hidden state */
+.loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+        
     </style>
 </head>
 
@@ -564,6 +611,12 @@
             if (e.key === 'ArrowRight') goTo(current + 1);
         });
 
+        const modelViewer = document.getElementById('modelViewer');
+const loader = document.getElementById('loader');
+
+modelViewer.addEventListener('load', () => {
+    loader.classList.add('hidden');
+});
         
     </script>
 
